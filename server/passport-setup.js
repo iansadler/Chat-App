@@ -2,7 +2,7 @@ const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth2').Strategy
 const port = process.env.PORT || 5000
 const clientInfo = require('./clientInfo')
-console.log(clientInfo)
+
 passport.serializeUser(function(user, done) {
   done(null, user.id)
 })

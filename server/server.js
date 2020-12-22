@@ -3,6 +3,7 @@ const cors = require('cors')
 const express = require('express')
 const auth = require('./routes/auth')
 const cookieSession = require('cookie-session')
+const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const app = express()
 const conversations = require('./testConversations.json')
@@ -13,9 +14,16 @@ app.use(cookieSession({
   keys: ['key1', 'key2']
 }))
 
+app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(cors())
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true
+}))
+
 app.use(express.json())
 app.use('/auth', auth)
 

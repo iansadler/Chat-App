@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
+const CLIENT_HOMEPAGE = 'http://localhost:3000'
 
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
@@ -18,22 +19,25 @@ router
   .get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/auth/failed' }),
     function(req, res) {
-      res.redirect('/auth/good')
+      res.redirect(CLIENT_HOMEPAGE)
     }
   )
 
-  .get('/failed', (req, res) => {
-    res.send('You failed to log in.')
-  })
-
-  .get('/good', (req, res) => {
-    res.send(`Welcome mr ${req.user.displayName}`)
+  .get("/success", isLoggedIn, (req, res) => {
+    if (req.user) {
+      res.json({
+        success: true,
+        message: "user has successfully authenticated",
+        user: req.user,
+        cookies: req.cookies
+      })
+    }
   })
 
   .get('/logout', (req, res) => {
     req.session = null
     req.logout()
-    req.redirect('/')
+    res.redirect(CLIENT_HOMEPAGE)
   })
 
 module.exports = router
