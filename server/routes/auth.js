@@ -40,4 +40,7 @@ router
     res.redirect(CLIENT_HOMEPAGE)
   })
 
-module.exports = router
+module.exports = {
+  auth: router,
+  isLoggedIn: isLoggedIn
+}
