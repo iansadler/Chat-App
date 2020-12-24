@@ -1,2 +1,3 @@
-<!-- Docker Build Command -->
+
+### Docker Build Image
 docker build . -t chatapp

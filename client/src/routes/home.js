@@ -5,7 +5,7 @@ import FriendCard from '../components/friendCard'
 import { Redirect } from 'react-router-dom'
 
 class Home extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       conversations: [],
@@ -71,7 +71,6 @@ class Home extends React.Component {
     )
   }
 
-  // This list currently includes the user themselves
   // We just display all users on the chat side bar.
   // We have no concept of friends / a user search right now.
   getUsers () {
@@ -134,7 +133,23 @@ class Home extends React.Component {
     )
   }
 
-  render() {
+  renderUserList () {
+    return this.state.conversations.map((c) => {
+      if (c.user_id === this.state.user.user_id) {
+        return null
+      } else {
+        return (
+          <FriendCard
+            clickFriendCard={() => this.clickFriendCard(c)}
+            key={c.user_id}
+            name={c.username}
+          />
+        )
+      }
+    })
+  }
+
+  render () {
     if (this.state.authenticated === false) {
       return <Redirect to={'/login'} />
     }
@@ -142,13 +157,7 @@ class Home extends React.Component {
     return (
       <div className='App' style={{ display: 'flex', height: '100vh' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {this.state.conversations.map((c) => (
-            <FriendCard
-              clickFriendCard={() => this.clickFriendCard(c)}
-              key={c.user_id}
-              name={c.username}
-            />
-          ))}
+          {this.renderUserList()}
         </div>
         <div style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
           <p>Currently logged in as {this.state.user.displayName}</p>

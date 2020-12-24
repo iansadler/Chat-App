@@ -26,8 +26,8 @@ passport.use(new GoogleStrategy({
       console.log('The user was not found')
       // Create new user in the db
       let string = `INSERT INTO users (google_id, username) VALUES ('${profile.id}', '${profile.displayName}') RETURNING *`
-      profile.user_id = createUser.rows[0].user_id
       const createUser = await pool.query(string)
+      profile.user_id = createUser.rows[0].user_id
     } else {
       profile.user_id = findUser.rows[0].user_id
     }
