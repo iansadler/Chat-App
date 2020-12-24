@@ -1,12 +1,14 @@
 CREATE DATABASE chat_app_database;
 
--- \c into chat_app_database
--- \l list the databases
--- \dt view relations
+-- psql -U postgres
+-- \c chat_app_database
+-- \l
+-- \dt
 
 CREATE TABLE messages (
   message_id SERIAL PRIMARY KEY,
   message_text VARCHAR(255),
+  sender VARCHAR(255),
   conversation_id INTEGER REFERENCES conversations (conversation_id)
 );
 

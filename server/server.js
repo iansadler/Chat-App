@@ -8,7 +8,6 @@ const passport = require('passport')
 const app = express()
 const conversations = require('./testConversations.json')
 const pool = require('./database/db')
-// const pool = require('./database/db')
 
 require('./passport-setup')
 app.use(cookieSession({
@@ -33,6 +32,11 @@ app.get('/api/users', isLoggedIn, async (req, res) => {
   const allUsers = await pool.query('SELECT user_id, username FROM users')
   res.json(allUsers.rows)
 })
+
+// User can query conversations regardless of whether they are involved at the moment.
+// app.get('/api/conversations/:id1/:id2', isLoggedIn, async (req, res) => {
+
+// })
 
 app.get('/', (req, res) => {
   res.send('Hello World.. you are not logged in')

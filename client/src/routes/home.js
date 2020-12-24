@@ -46,6 +46,32 @@ class Home extends React.Component {
       })
   }
 
+  getConversation (id) {
+    fetch(`http://localhost:5000/api/conversations/${this.state.user.user_id}/${id}`, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res =>  res.json())
+    .then(
+      (result) => {
+        this.setState({
+          conversations: result
+        })
+      },
+      (error) => {
+        console.log(error)
+        this.setState({
+          error
+        })
+      }
+    )
+  }
+
+  // This list currently includes the user themselves
   // We just display all users on the chat side bar.
   // We have no concept of friends / a user search right now.
   getUsers () {
@@ -78,6 +104,7 @@ class Home extends React.Component {
   }
 
   clickFriendCard = (c) => {
+    this.getConversation(c.user_id)
     this.setState({ openedConversation: c })
   }
 

@@ -5,7 +5,8 @@ const clientInfo = require('./clientInfo')
 const pool = require('./database/db')
 
 passport.serializeUser(function(user, done) {
-  done(null, {id: user.id, displayName: user.displayName })
+  console.log(user)
+  done(null, {id: user.id, displayName: user.displayName, user_id:user.user_id })
 })
 
 passport.deserializeUser(function(user, done) {
@@ -25,8 +26,10 @@ passport.use(new GoogleStrategy({
       console.log('The user was not found')
       // Create new user in the db
       let string = `INSERT INTO users (google_id, username) VALUES ('${profile.id}', '${profile.displayName}') RETURNING *`
-      console.log(string)
+      profile.user_id = createUser.rows[0].user_id
       const createUser = await pool.query(string)
+    } else {
+      profile.user_id = findUser.rows[0].user_id
     }
     return done(null, profile)
   }
